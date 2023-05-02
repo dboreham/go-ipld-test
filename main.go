@@ -8,6 +8,7 @@ import (
 
 	"github.com/dboreham/go-ipld-test/model"
 
+	"github.com/ipld/go-ipld-prime"
 	"github.com/ipld/go-ipld-prime/codec/dagjson"
 	"github.com/ipld/go-ipld-prime/node/bindnode"
 
@@ -19,6 +20,33 @@ import (
 )
 
 func main() {
+
+	ts, err := ipld.LoadSchemaBytes([]byte(`
+	type Person struct {
+		Name    String
+		Age     optional Int
+		Friends optional [String]
+	}
+`))
+	if err != nil {
+		panic(err)
+	}
+	schemaType := ts.TypeByName("Person")
+
+	type Person struct {
+		Name    string
+		Age     *int64   // optional
+		Friends []string // optional; no need for a pointer as slices are nilable
+	}
+	ipldPerson := &Person{
+		Name:    "Michael",
+		Friends: []string{"Sarah", "Alex"},
+	}
+	personNode := bindnode.Wrap(ipldPerson, schemaType)
+
+	personNodeRepr := personNode.Representation()
+	dagjson.Encode(personNodeRepr, os.Stdout)
+
 	// Demonstrate the generated Go protobuf code using:
 	// ```
 	// go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
