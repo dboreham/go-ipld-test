@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package main;
+option go_package = "github.com/deep-stack/proto-ipld-experiments/model";
+
+message Person {
+  string name = 1;
+  int32 age = 2;
+}
+
+message JobDescription {
+  string company = 1;
+  int32 salary = 2;
+}
