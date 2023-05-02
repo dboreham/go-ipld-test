@@ -102,6 +102,7 @@ func main() {
 	if err := proto.Unmarshal(personData, dynamicMessage); err != nil {
 		log.Fatalf("Error parsing personData: %v", err)
 	}
+	fmt.Printf("Deserialized dynamic person: %v\n", dynamicMessage)
 
 	// Using go-ipld-prime bindnode to IPLDize the created dynamic message
 
